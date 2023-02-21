@@ -1,19 +1,19 @@
-package com.example.multiauthentication.security.controller.admin.sign;
+package com.example.multiauthentication.controller.user.sign;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin/sign")
-public class AdminSignController {
+@RequestMapping("/user/sign")
+public class UserSignController {
 
     @RequestMapping(value = {"", "/"})
     public String index() {
-        return "redirect:/admin/sign/in";
+        return "redirect:/user/sign/in";
     }
 
     @RequestMapping("in")
     public String in() {
-        return "admin/sign-in";
+        return "user/sign-in";
     }
 }

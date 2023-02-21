@@ -1,4 +1,4 @@
-package com.example.multiauthentication.security.controller.admin;
+package com.example.multiauthentication.controller.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

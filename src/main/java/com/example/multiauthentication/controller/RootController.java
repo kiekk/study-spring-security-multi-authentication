@@ -1,14 +1,13 @@
-package com.example.multiauthentication.security.controller.user;
+package com.example.multiauthentication.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/user")
-public class UserRootController {
+public class RootController {
 
     @RequestMapping(value = {"", "/"})
     public String index() {
-        return "redirect:/user/sign";
+        return "index";
     }
 }
