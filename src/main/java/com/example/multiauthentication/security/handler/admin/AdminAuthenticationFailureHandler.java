@@ -14,6 +14,7 @@ public class AdminAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        System.out.println("---called AdminAuthenticationFailureHandler.onAuthenticationFailure");
         response.sendRedirect("/admin/sign/in");
     }
 }

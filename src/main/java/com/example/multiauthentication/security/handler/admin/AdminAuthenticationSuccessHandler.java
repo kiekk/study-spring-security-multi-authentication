@@ -14,6 +14,7 @@ public class AdminAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        System.out.println("---called AdminAuthenticationFailureHandler.onAuthenticationSuccess");
         response.sendRedirect("/admin/board/list");
     }
 

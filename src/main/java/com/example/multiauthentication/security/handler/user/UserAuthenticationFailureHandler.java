@@ -14,6 +14,7 @@ public class UserAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        System.out.println("---called UserAuthenticationFailureHandler.onAuthenticationFailure");
         response.sendRedirect("/user/sign/in");
     }
 }

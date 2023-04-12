@@ -14,6 +14,7 @@ public class UserAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        System.out.println("---called UserAuthenticationFailureHandler.onAuthenticationSuccess");
         response.sendRedirect("/user/board/list");
     }
 
