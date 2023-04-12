@@ -2,6 +2,7 @@ package com.example.multiauthentication.security.config;
 
 import com.example.multiauthentication.security.common.FormAuthenticationDetailsSource;
 import com.example.multiauthentication.security.provider.admin.AdminAuthenticationProvider;
+import com.example.multiauthentication.security.provider.user.UserAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -57,10 +58,6 @@ public class SecurityConfig {
         @Bean
         public UserDetailsService userDetailsService() {
             InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-            manager.createUser(User.withUsername("user")
-                    .password(bCryptPasswordEncoder().encode("userPass"))
-                    .roles("USER")
-                    .build());
             manager.createUser(User.withUsername("admin")
                     .password(bCryptPasswordEncoder().encode("adminPass"))
                     .roles("USER", "ADMIN")
@@ -83,19 +80,49 @@ public class SecurityConfig {
     @Configuration
     @Order(2)
     static class UserSecurityConfig {
+
+        private final AuthenticationSuccessHandler userAuthenticationSuccessHandler;
+        private final AuthenticationFailureHandler userAuthenticationFailureHandler;
+
+        UserSecurityConfig(AuthenticationSuccessHandler userAuthenticationSuccessHandler, AuthenticationFailureHandler userAuthenticationFailureHandler) {
+            this.userAuthenticationSuccessHandler = userAuthenticationSuccessHandler;
+            this.userAuthenticationFailureHandler = userAuthenticationFailureHandler;
+        }
+
         @Bean
         SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
             return http
-                    .authorizeHttpRequests(authz -> {
+                    .authorizeHttpRequests((authz) -> {
                         authz.requestMatchers("/user/sign/**").permitAll();
                         authz.requestMatchers("/user/**").hasRole("USER");
                     })
-                    .formLogin()
-                    .loginPage("/user/sign/in")
-                    .loginProcessingUrl("/user/sign/in")
-                    .permitAll()
-                    .and()
+                    .formLogin((formLogin) -> {
+                        formLogin.loginPage("/user/sign/in");
+                        formLogin.loginProcessingUrl("/user/sign/in");
+                        formLogin.successHandler(userAuthenticationSuccessHandler);
+                        formLogin.failureHandler(userAuthenticationFailureHandler);
+                    })
                     .build();
+        }
+
+        @Bean
+        public UserDetailsService userDetailsService() {
+            InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+            manager.createUser(User.withUsername("user")
+                    .password(bCryptPasswordEncoder().encode("userPass"))
+                    .roles("USER")
+                    .build());
+            return manager;
+        }
+
+        @Bean
+        public BCryptPasswordEncoder bCryptPasswordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
+
+        @Bean
+        public AuthenticationProvider authenticationProvider() {
+            return new UserAuthenticationProvider(userDetailsService(), bCryptPasswordEncoder());
         }
     }
 }
