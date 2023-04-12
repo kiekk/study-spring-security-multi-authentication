@@ -44,9 +44,10 @@ public class SecurityConfig {
         SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
             return http
                     .csrf().disable()
+                    .securityMatcher("/admin/**")
                     .authorizeHttpRequests((authz) -> {
                         authz.requestMatchers("/admin/sign/**").permitAll();
-                        authz.requestMatchers("/admin/**").hasRole("ADMIN");
+                        authz.anyRequest().hasRole("ADMIN");
                     })
                     .formLogin((formLogin) -> {
                         formLogin.loginPage("/admin/sign/in");
@@ -92,9 +93,11 @@ public class SecurityConfig {
         @Bean
         SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
             return http
+                    .csrf().disable()
+                    .securityMatcher("/user/**")
                     .authorizeHttpRequests((authz) -> {
                         authz.requestMatchers("/user/sign/**").permitAll();
-                        authz.requestMatchers("/user/**").hasRole("USER");
+                        authz.anyRequest().hasRole("USER");
                     })
                     .formLogin((formLogin) -> {
                         formLogin.loginPage("/user/sign/in");
@@ -102,6 +105,7 @@ public class SecurityConfig {
                         formLogin.successHandler(userAuthenticationSuccessHandler);
                         formLogin.failureHandler(userAuthenticationFailureHandler);
                     })
+                    .authenticationProvider(userAuthenticationProvider())
                     .build();
         }
 
