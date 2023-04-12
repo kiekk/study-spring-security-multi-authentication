@@ -1,7 +1,7 @@
 package com.example.multiauthentication.security.config;
 
 import com.example.multiauthentication.security.common.FormAuthenticationDetailsSource;
-import com.example.multiauthentication.security.provider.CustomAuthenticationProvider;
+import com.example.multiauthentication.security.provider.admin.AdminAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -75,7 +75,7 @@ public class SecurityConfig {
 
         @Bean
         public AuthenticationProvider authenticationProvider() {
-            return new CustomAuthenticationProvider(userDetailsService(), bCryptPasswordEncoder());
+            return new AdminAuthenticationProvider(userDetailsService(), bCryptPasswordEncoder());
         }
 
     }
