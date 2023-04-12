@@ -1,4 +1,4 @@
-package com.example.multiauthentication.security.handler;
+package com.example.multiauthentication.security.handler.admin;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+public class AdminAccessDeniedHandler implements AccessDeniedHandler {
 
     private String errorPage;
 
