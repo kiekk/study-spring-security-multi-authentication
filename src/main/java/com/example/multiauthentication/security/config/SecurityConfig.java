@@ -21,6 +21,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Bean
+    public static BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Configuration
     @Order(1)
     static class AdminSecurityConfig {
@@ -50,13 +55,13 @@ public class SecurityConfig {
                         formLogin.successHandler(adminAuthenticationSuccessHandler);
                         formLogin.failureHandler(adminAuthenticationFailureHandler);
                     })
-                    .authenticationProvider(authenticationProvider())
+                    .authenticationProvider(adminAuthenticationProvider())
                     .build();
         }
 
 
         @Bean
-        public UserDetailsService userDetailsService() {
+        public UserDetailsService adminUserDetailsService() {
             InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
             manager.createUser(User.withUsername("admin")
                     .password(bCryptPasswordEncoder().encode("adminPass"))
@@ -66,13 +71,8 @@ public class SecurityConfig {
         }
 
         @Bean
-        public BCryptPasswordEncoder bCryptPasswordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-
-        @Bean
-        public AuthenticationProvider authenticationProvider() {
-            return new AdminAuthenticationProvider(userDetailsService(), bCryptPasswordEncoder());
+        public AuthenticationProvider adminAuthenticationProvider() {
+            return new AdminAuthenticationProvider(adminUserDetailsService(), bCryptPasswordEncoder());
         }
 
     }
@@ -106,7 +106,7 @@ public class SecurityConfig {
         }
 
         @Bean
-        public UserDetailsService userDetailsService() {
+        public UserDetailsService userUserDetailsService() {
             InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
             manager.createUser(User.withUsername("user")
                     .password(bCryptPasswordEncoder().encode("userPass"))
@@ -116,13 +116,8 @@ public class SecurityConfig {
         }
 
         @Bean
-        public BCryptPasswordEncoder bCryptPasswordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-
-        @Bean
-        public AuthenticationProvider authenticationProvider() {
-            return new UserAuthenticationProvider(userDetailsService(), bCryptPasswordEncoder());
+        public AuthenticationProvider userAuthenticationProvider() {
+            return new UserAuthenticationProvider(userUserDetailsService(), bCryptPasswordEncoder());
         }
     }
 }
