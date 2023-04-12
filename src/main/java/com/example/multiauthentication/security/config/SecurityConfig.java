@@ -5,9 +5,7 @@ import com.example.multiauthentication.security.provider.CustomAuthenticationPro
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -27,13 +25,13 @@ public class SecurityConfig {
     static class AdminSecurityConfig {
 
         private final FormAuthenticationDetailsSource formAuthenticationDetailsSource;
-        private final AuthenticationSuccessHandler authenticationSuccessHandler;
-        private final AuthenticationFailureHandler authenticationFailureHandler;
+        private final AuthenticationSuccessHandler adminAuthenticationSuccessHandler;
+        private final AuthenticationFailureHandler adminAuthenticationFailureHandler;
 
-        public AdminSecurityConfig(FormAuthenticationDetailsSource formAuthenticationDetailsSource, AuthenticationSuccessHandler authenticationSuccessHandler, AuthenticationFailureHandler authenticationFailureHandler) {
+        public AdminSecurityConfig(FormAuthenticationDetailsSource formAuthenticationDetailsSource, AuthenticationSuccessHandler adminAuthenticationSuccessHandler, AuthenticationFailureHandler adminAuthenticationFailureHandler) {
             this.formAuthenticationDetailsSource = formAuthenticationDetailsSource;
-            this.authenticationSuccessHandler = authenticationSuccessHandler;
-            this.authenticationFailureHandler = authenticationFailureHandler;
+            this.adminAuthenticationSuccessHandler = adminAuthenticationSuccessHandler;
+            this.adminAuthenticationFailureHandler = adminAuthenticationFailureHandler;
         }
 
         @Bean
@@ -48,8 +46,8 @@ public class SecurityConfig {
                         formLogin.loginPage("/admin/sign/in");
                         formLogin.loginProcessingUrl("/admin/sign/in").permitAll();
                         formLogin.authenticationDetailsSource(formAuthenticationDetailsSource);
-                        formLogin.successHandler(authenticationSuccessHandler);
-                        formLogin.failureHandler(authenticationFailureHandler);
+                        formLogin.successHandler(adminAuthenticationSuccessHandler);
+                        formLogin.failureHandler(adminAuthenticationFailureHandler);
                     })
                     .authenticationProvider(authenticationProvider())
                     .build();
